@@ -1,35 +1,44 @@
-fun isBoardValid(board: Array<IntArray>): Boolean {
+fun isBoardValid(board: Array<CharArray>): Boolean {
     for (row in 0 until 9) {
-        val seen = mutableSetOf<Int>()
+        val seen = mutableSetOf<Char>()
         for (col in 0 until 9) {
             val num = board[row][col]
-            if (num != 0 && !seen.add(num)) {
-                return false
+            if (num != '_') {
+                if (seen.contains(num)) {
+                    return false
+                }
+                seen.add(num)
             }
         }
     }
 
     // Check all columns
     for (col in 0 until 9) {
-        val seen = mutableSetOf<Int>()
+        val seen = mutableSetOf<Char>()
         for (row in 0 until 9) {
             val num = board[row][col]
-            if (num != 0 && !seen.add(num)) {
-                return false
+            if (num != '_') {
+                if (seen.contains(num)) {
+                    return false
+                }
+                seen.add(num)
             }
         }
     }
 
     // Check all 3x3 subgrids
     for (box in 0 until 9) {
-        val seen = mutableSetOf<Int>()
+        val seen = mutableSetOf<Char>()
         val startRow = (box / 3) * 3
         val startCol = (box % 3) * 3
         for (row in startRow until startRow + 3) {
             for (col in startCol until startCol + 3) {
                 val num = board[row][col]
-                if (num != 0 && !seen.add(num)) {
-                    return false
+                if (num != '_') {
+                    if (seen.contains(num)) {
+                        return false
+                    }
+                    seen.add(num)
                 }
             }
         }
@@ -38,69 +47,80 @@ fun isBoardValid(board: Array<IntArray>): Boolean {
     return true
 }
 
-fun check(name: String , result:Boolean , correctResult:Boolean){
-    if (result == correctResult){
+fun check(name: String, result: Boolean, correctResult: Boolean) {
+    if (result == correctResult) {
         println("success - $name")
-    }else{
+    } else {
         println("failed - $name")
     }
 }
 
 fun main() {
     val board = arrayOf(
-        intArrayOf(5, 3, 3, 0, 7, 0, 0, 0, 0),
-        intArrayOf(6, 0, 0, 1, 9, 5, 0, 0, 0),
-        intArrayOf(0, 9, 8, 0, 0, 0, 0, 6, 0),
-        intArrayOf(8, 0, 0, 0, 6, 0, 0, 0, 3),
-        intArrayOf(4, 0, 0, 8, 0, 3, 0, 0, 1),
-        intArrayOf(7, 0, 0, 0, 2, 0, 0, 0, 6),
-        intArrayOf(0, 6, 0, 0, 0, 0, 2, 8, 0),
-        intArrayOf(0, 0, 0, 4, 1, 9, 0, 0, 5),
-        intArrayOf(0, 0, 0, 0, 8, 0, 0, 7, 9)
+        charArrayOf('5', '3', '3', '_', '7', '_', '_', '_', '_'),
+        charArrayOf('6', '_', '_', '1', '9', '5', '_', '_', '_'),
+        charArrayOf('_', '9', '8', '_', '_', '_', '_', '6', '_'),
+        charArrayOf('8', '_', '_', '_', '6', '_', '_', '_', '3'),
+        charArrayOf('4', '_', '_', '8', '_', '3', '_', '_', '1'),
+        charArrayOf('7', '_', '_', '_', '2', '_', '_', '_', '6'),
+        charArrayOf('_', '6', '_', '_', '_', '_', '2', '8', '_'),
+        charArrayOf('_', '_', '_', '4', '1', '9', '_', '_', '5'),
+        charArrayOf('_', '_', '_', '_', '8', '_', '_', '7', '9')
     )
     val fullValidBoard = arrayOf(
-        intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9),
-        intArrayOf(4, 5, 6, 7, 8, 9, 1, 2, 3),
-        intArrayOf(7, 8, 9, 1, 2, 3, 4, 5, 6),
-        intArrayOf(2, 3, 4, 5, 6, 7, 8, 9, 1),
-        intArrayOf(5, 6, 7, 8, 9, 1, 2, 3, 4),
-        intArrayOf(8, 9, 1, 2, 3, 4, 5, 6, 7),
-        intArrayOf(3, 4, 5, 6, 7, 8, 9, 1, 2),
-        intArrayOf(6, 7, 8, 9, 1, 2, 3, 4, 5),
-        intArrayOf(9, 1, 2, 3, 4, 5, 6, 7, 8)
+        charArrayOf('1', '2', '3', '4', '5', '6', '7', '8', '9'),
+        charArrayOf('4', '5', '6', '7', '8', '9', '1', '2', '3'),
+        charArrayOf('7', '8', '9', '1', '2', '3', '4', '5', '6'),
+        charArrayOf('2', '3', '4', '5', '6', '7', '8', '9', '1'),
+        charArrayOf('5', '6', '7', '8', '9', '1', '2', '3', '4'),
+        charArrayOf('8', '9', '1', '2', '3', '4', '5', '6', '7'),
+        charArrayOf('3', '4', '5', '6', '7', '8', '9', '1', '2'),
+        charArrayOf('6', '7', '8', '9', '1', '2', '3', '4', '5'),
+        charArrayOf('9', '1', '2', '3', '4', '5', '6', '7', '8')
     )
-    val empty = Array(9) { IntArray(9) { 0 } }
+    val empty = Array(9) { CharArray(9) { '_' } }
+    /* How I have implemented empty at first case:
 
-    check(name = "when a subgrid has a duplicated numbers ",
-        result =isBoardValid(empty) ,
+        val empty = Array(9) { row ->
+        CharArray(9) { col ->
+            '_'
+        }
+    }
+
+    for (row in empty) {
+        for (i in row) {
+            print("$i ")
+        }
+        println()  // New line after each row
+    } */
+
+    check(name = "empty board should be valid",
+        result = isBoardValid(empty),
         correctResult = true
     )
 
-    check(name = "when a subgrid has a duplicated numbers ",
-        result =isBoardValid(board) ,
+    check(name = "when a subgrid has duplicated numbers",
+        result = isBoardValid(board),
         correctResult = false
     )
-    check(name = "when a row has a duplicated numbers ",
-        result =isBoardValid(board) ,
+    check(name = "when a row has duplicated numbers",
+        result = isBoardValid(board),
         correctResult = false
     )
-    check(name = "when a column has a duplicated numbers ",
-        result =isBoardValid(board) ,
+    check(name = "when a column has duplicated numbers",
+        result = isBoardValid(board),
         correctResult = false
     )
-    check(name = "when a subgrid has a  no duplicated numbers ",
-        result =isBoardValid(fullValidBoard) ,
+    check(name = "when a subgrid has no duplicated numbers",
+        result = isBoardValid(fullValidBoard),
         correctResult = true
     )
-    check(name = "when a column has a no duplicated numbers ",
-        result =isBoardValid(fullValidBoard) ,
+    check(name = "when a column has no duplicated numbers",
+        result = isBoardValid(fullValidBoard),
         correctResult = true
     )
-    check(name = "when a row has a no duplicated numbers ",
-        result =isBoardValid(fullValidBoard) ,
+    check(name = "when a row has no duplicated numbers",
+        result = isBoardValid(fullValidBoard),
         correctResult = true
     )
-
-
-
 }
